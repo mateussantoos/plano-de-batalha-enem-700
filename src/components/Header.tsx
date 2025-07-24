@@ -27,7 +27,9 @@ export default function Header({ activeView, setActiveView }: HeaderProps) {
               <button
                 key={item.id}
                 onClick={() => setActiveView(item.id)}
-                className={`nav-link ${activeView === item.id ? "active" : ""}`}
+                className={`nav-link cursor-pointer hover:text-[#3a86ff] transition-colors duration-200 ${
+                  activeView === item.id ? "text-[#3a86ff] active" : ""
+                }`}
               >
                 {item.label}
               </button>

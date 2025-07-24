@@ -53,8 +53,8 @@ export default function Resources() {
                   className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 group"
                 >
                   <div>
-                    <p className="font-semibold text-gray-700">${p.name}</p>
-                    <p className="text-sm text-gray-500">${p.description}</p>
+                    <p className="font-semibold text-gray-700">{p.name}</p>
+                    <p className="text-sm text-gray-500">{p.description}</p>
                   </div>
                   <span className="text-blue-500 opacity-0 group-hover:opacity-100">
                     →

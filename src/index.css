@@ -7,31 +7,60 @@ body {
 }
 
 .nav-link {
-  @apply py-1 px-2 transition-all duration-300 ease-in-out border-b-2 border-transparent;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  transition-property: all;
+  transition-duration: 300ms;
+  transition-timing-function: ease-in-out;
+  border-bottom-width: 2px;
+  border-bottom-style: solid;
+  border-bottom-color: transparent;
 }
 
 .nav-link.active {
-  @apply text-[#3a86ff] border-b-[#3a86ff];
+  color: #3a86ff;
+  border-bottom-color: #3a86ff;
 }
 
 .nav-link:hover {
-  @apply text-[#3a86ff];
+  color: #3a86ff;
 }
 
 #modal-overlay {
-  @apply fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center transition-opacity duration-300;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition-property: opacity, visibility;
+  transition-duration: 300ms;
 }
 
 #modal-overlay.visible {
-  @apply opacity-100 visible;
+  opacity: 1;
+  visibility: visible;
 }
 
 #modal-overlay.hidden {
-  @apply opacity-0 invisible;
+  opacity: 0;
+  visibility: hidden;
 }
 
 #modal-content {
-  @apply bg-white p-8 rounded-lg max-w-[90%] w-[600px] max-h-[80vh] overflow-y-auto relative transition-transform duration-300;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  max-width: 90%;
+  width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  transition-property: transform;
+  transition-duration: 300ms;
   transform: scale(0.95);
 }
 

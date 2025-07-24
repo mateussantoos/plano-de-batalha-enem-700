@@ -49,7 +49,7 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
                     {q.options[q.correct_answer_index]}
                   </p>
                   <p className="mt-1">
-                    <strong>Explicação:</strong> ${q.explanation}
+                    <strong>Explicação:</strong> {q.explanation}
                   </p>
                 </div>
               </details>
@@ -103,7 +103,7 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {studyData.schedule.weeks[selectedWeek].days.map((d) => (
           <Card key={d.day} className="p-5">
-            <div className="flex-grow">
+            <div className="flex-grow ">
               <h4 className="text-lg font-bold text-gray-800">{d.day}</h4>
               <p className="text-md font-semibold text-[#3a86ff] mt-1">
                 {d.subject}
@@ -117,7 +117,7 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
                 </p>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="flex items-start w-full  mt-4 pt-4 border-t border-gray-100">
               <AiButton
                 onClick={() => handleGenerateQuestions(d.content)}
                 label="Gerar Questões"
