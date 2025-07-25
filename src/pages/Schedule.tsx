@@ -1,10 +1,10 @@
-// src/pages/Schedule.tsx
 import React, { useState } from "react";
 import { studyData } from "../constants/studyData";
 import { generateQuestions } from "../services/gemini";
 import Card from "../components/Card";
 import AiButton from "../components/AiButton";
-import type { GeneratedQuestion } from "../types";
+import Loader from "../components/Loader";
+import AiQuizModalContent from "../components/AiQuizModalContent"; // Importamos o novo componente
 
 interface ScheduleProps {
   setModalContent: (content: React.ReactNode) => void;
@@ -18,46 +18,19 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
 
   const handleGenerateQuestions = async (content: string) => {
     setGeneratingQuestions(content);
+    setModalContent(
+      <div className="flex flex-col items-center justify-center p-8">
+        <Loader />
+        <p className="mt-4 text-gray-600">Gerando questões com IA...</p>
+      </div>
+    );
+
     try {
       const data = await generateQuestions(content);
-      const questionContent = (
-        <div>
-          <h3 className="text-xl font-bold mb-4">Questões sobre "{content}"</h3>
-          {data.questions.map((q: GeneratedQuestion, index: number) => (
-            <div key={index} className="mb-6">
-              <p className="font-semibold mb-2">
-                Questão {index + 1}: {q.question_text}
-              </p>
-              <ul className="list-none space-y-1 mb-3">
-                {q.options.map((opt: string, i: number) => (
-                  <li key={i}>
-                    <span className="font-bold">
-                      {String.fromCharCode(65 + i)})
-                    </span>{" "}
-                    {opt}
-                  </li>
-                ))}
-              </ul>
-              <details className="bg-gray-100 p-2 rounded-md cursor-pointer">
-                <summary className="font-semibold text-sm">
-                  Ver Resposta e Explicação
-                </summary>
-                <div className="mt-2 text-sm">
-                  <p>
-                    <strong>Resposta Correta:</strong>{" "}
-                    {String.fromCharCode(65 + q.correct_answer_index)}){" "}
-                    {q.options[q.correct_answer_index]}
-                  </p>
-                  <p className="mt-1">
-                    <strong>Explicação:</strong> {q.explanation}
-                  </p>
-                </div>
-              </details>
-            </div>
-          ))}
-        </div>
+      const quizContent = (
+        <AiQuizModalContent questions={data.questions} topic={content} />
       );
-      setModalContent(questionContent);
+      setModalContent(quizContent);
     } catch (error) {
       setModalContent(
         <p className="text-red-500">Erro ao gerar questões. Tente novamente.</p>
@@ -95,7 +68,7 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
       <div className="text-center mb-6">
         <h3 className="text-xl font-semibold text-gray-700">
           Foco da Semana:{" "}
-          <span className="text-[#3a86ff]">
+          <span className="text-blue-500">
             {studyData.schedule.weeks[selectedWeek].focus}
           </span>
         </h3>
@@ -103,9 +76,9 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {studyData.schedule.weeks[selectedWeek].days.map((d) => (
           <Card key={d.day} className="p-5">
-            <div className="flex-grow ">
+            <div className="flex-grow">
               <h4 className="text-lg font-bold text-gray-800">{d.day}</h4>
-              <p className="text-md font-semibold text-[#3a86ff] mt-1">
+              <p className="text-md font-semibold text-blue-500 mt-1">
                 {d.subject}
               </p>
               <div className="mt-4 text-gray-600 space-y-2">
@@ -117,10 +90,10 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
                 </p>
               </div>
             </div>
-            <div className="flex items-start w-full  mt-4 pt-4 border-t border-gray-100">
+            <div className="mt-4 pt-4 border-t border-gray-100">
               <AiButton
                 onClick={() => handleGenerateQuestions(d.content)}
-                label="Gerar Questões"
+                label="Praticar com IA"
                 isGenerating={generatingQuestions === d.content}
               />
             </div>

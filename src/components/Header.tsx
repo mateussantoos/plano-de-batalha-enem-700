@@ -10,6 +10,7 @@ export default function Header({ activeView, setActiveView }: HeaderProps) {
   const navItems: { id: View; label: string }[] = [
     { id: "visao-geral", label: "Visão Geral" },
     { id: "cronograma", label: "Cronograma" },
+    { id: "simulados", label: "Simulados" },
     { id: "progresso", label: "Progresso" },
     { id: "recursos", label: "Recursos" },
   ];

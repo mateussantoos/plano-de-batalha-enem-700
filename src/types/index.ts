@@ -1,4 +1,11 @@
-export type View = "visao-geral" | "cronograma" | "progresso" | "recursos";
+// src/types/index.ts
+
+export type View =
+  | "visao-geral"
+  | "cronograma"
+  | "progresso"
+  | "recursos"
+  | "simulados";
 
 export interface Day {
   day: string;
@@ -28,4 +35,21 @@ export interface GeneratedQuestion {
 
 export interface GeneratedQuestionsResponse {
   questions: GeneratedQuestion[];
+}
+
+export interface EnemQuestionFromAPI {
+  index: number;
+  year: number;
+  discipline: string;
+  context: string;
+  files: string[];
+  alternativesIntroduction: string;
+  alternatives: {
+    letter: string;
+    text: string;
+    file: string | null;
+    isCorrect: boolean;
+  }[];
+  correctAlternative: string;
+  language?: "ingles" | "espanhol" | null;
 }
