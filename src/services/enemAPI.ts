@@ -88,7 +88,6 @@ export const generateBalancedSimulado = async (
         questionPool.matematica.push(q);
         break;
       case "linguagens":
-        // Garantimos aqui que só questões de inglês entrem, embora a API já deva ter filtrado.
         if (q.language === "ingles") {
           questionPool.linguagens.push(q);
         }

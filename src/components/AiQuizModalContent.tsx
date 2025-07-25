@@ -78,7 +78,6 @@ export default function AiQuizModalContent({
             </div>
             {isAnalyzing ? (
               <div className="flex justify-center p-4">
-                <span className="text-sm ">Gerando análise...</span>
                 <Loader />
               </div>
             ) : (
@@ -138,6 +137,13 @@ export default function AiQuizModalContent({
                   );
                 })}
               </div>
+              {/* CORREÇÃO ADICIONADA AQUI */}
+              {isFinished && (
+                <div className="mt-3 text-xs p-2 bg-yellow-50 text-yellow-900 rounded border border-yellow-200">
+                  <strong className="font-bold">Explicação:</strong>{" "}
+                  {q.explanation}
+                </div>
+              )}
             </div>
           ))}
         </div>
