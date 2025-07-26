@@ -50,12 +50,12 @@ export default function App() {
         return <Resources />;
       case "visao-geral":
       default:
-        return <Overview />;
+        return <Overview setActiveView={setActiveView} />;
     }
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen font-rounded  ">
       {isSimuladoActive ? (
         <SimuladoView
           questions={simuladoQuestions}

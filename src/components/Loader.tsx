@@ -1,7 +1,7 @@
-// src/components/Loader.tsx
+import { LoaderCircle } from "lucide-react";
 
-export default function Loader() {
+export const Loader = () => {
   return (
-    <div className="w-6 h-6 border-3 border-black border-b-transparent rounded-full inline-block box-border animate-spin" />
+    <LoaderCircle className="h-12 w-12 stroke-3 animate-spin text-green-500" />
   );
-}
+};

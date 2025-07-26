@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import type { EnemQuestionFromAPI } from "../types";
 import { analyzeMistakes } from "../services/analysisService";
-import Loader from "./Loader";
+import { Loader } from "./Loader";
 
 interface SimuladoViewProps {
   questions: EnemQuestionFromAPI[];

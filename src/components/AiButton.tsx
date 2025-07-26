@@ -1,5 +1,4 @@
-// src/components/AiButton.tsx
-import Loader from "./Loader";
+import { Loader } from "lucide-react";
 
 interface AiButtonProps {
   onClick: () => void;
@@ -16,9 +15,9 @@ export default function AiButton({
     <button
       onClick={onClick}
       disabled={isGenerating}
-      className="w-full py-2 px-4 rounded-md text-sm font-semibold flex items-center justify-center gap-2 bg-[#8338ec] text-white transition-colors hover:bg-[#6a2ab3] disabled:bg-[#a481d1] disabled:cursor-not-allowed"
+      className="cursor-pointer w-full flex items-center justify-center gap-2 rounded-xl border-b-4 border-green-700 bg-green-500 py-3 px-4 font-bold uppercase tracking-wider text-white transition-all duration-150 ease-in-out hover:brightness-105 active:translate-y-1 active:border-b-0 disabled:cursor-not-allowed disabled:border-b-0 disabled:bg-gray-300 disabled:text-gray-500"
     >
-      {isGenerating ? <Loader /> : "✨"}
+      {isGenerating ? <Loader className="animate-spin" /> : "✨"}
       <span>{isGenerating ? "Gerando..." : label}</span>
     </button>
   );

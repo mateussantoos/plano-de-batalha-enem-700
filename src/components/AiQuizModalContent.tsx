@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { GeneratedQuestion } from "../types";
 import { analyzeQuizMistakes } from "../services/analysisService";
-import Loader from "./Loader";
+import { Loader } from "./Loader";
 import ActionButton from "./ActionButton";
 
 interface AiQuizModalContentProps {

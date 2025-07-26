@@ -3,9 +3,8 @@ import { studyData } from "../constants/studyData";
 import { generateRepertoire } from "../services/gemini";
 import { generateBalancedSimulado } from "../services/enemAPI";
 import Card from "../components/Card";
-import AiButton from "../components/AiButton";
-import ActionButton from "../components/ActionButton";
 import type { EnemQuestionFromAPI } from "../types";
+import Button from "../components/common/Button";
 
 interface ProgressProps {
   startSimulado: (questions: EnemQuestionFromAPI[], title: string) => void;
@@ -22,8 +21,10 @@ export default function Progress({ startSimulado }: ProgressProps) {
 
   const handleGenerateRepertoire = async (theme: string) => {
     setGeneratingRepertoire(theme);
+    console.log("Iniciando geração de repertório...");
     try {
       const data = await generateRepertoire(theme);
+      console.log(data);
       const formattedText = data
         .replace(/\n/g, "<br />")
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
@@ -37,6 +38,7 @@ export default function Progress({ startSimulado }: ProgressProps) {
         </div>
       );
     } catch (error) {
+      console.error("Erro ao gerar repertório:", error);
       setModalContent(
         <p className="text-red-500">
           Erro ao gerar repertório. Tente novamente.
@@ -65,10 +67,10 @@ export default function Progress({ startSimulado }: ProgressProps) {
   return (
     <section id="progresso" className="space-y-8">
       <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-800">
+        <h2 className="text-3xl  text-gray-800 font-black">
           {studyData.progress.title}
         </h2>
-        <p className="mt-2 max-w-3xl mx-auto text-lg text-gray-600">
+        <p className="mt-2 max-w-3xl mx-auto text-lg text-gray-400 font-bold">
           {studyData.progress.intro}
         </p>
       </div>
@@ -82,7 +84,7 @@ export default function Progress({ startSimulado }: ProgressProps) {
             <Card key={item.week} className="p-5">
               <div className="flex flex-col md:flex-row justify-between items-center">
                 <div className="flex-grow mb-4 md:mb-0 md:pr-4">
-                  <p className="text-sm font-bold text-blue-500">
+                  <p className="text-sm font-bold text-duo-blue">
                     SEMANA {item.week}
                   </p>
                   <h4 className="text-lg font-semibold text-gray-800 mt-1">
@@ -95,20 +97,20 @@ export default function Progress({ startSimulado }: ProgressProps) {
                   </p>
                 </div>
                 <div className="flex-shrink-0 w-full md:w-auto flex flex-col md:flex-row gap-2">
-                  <AiButton
+                  <Button
                     onClick={() => handleGenerateRepertoire(item.theme)}
-                    label="Gerar Repertório"
                     isGenerating={generatingRepertoire === item.theme}
-                  />
+                  >
+                    Gerar Repertório
+                  </Button>
                   {numQuestoes > 0 && (
-                    <ActionButton
-                      text={`Gerar Simulado (${numQuestoes}Q)`}
+                    <Button
                       onClick={() =>
                         handleGenerateSimulado(numQuestoes, item.week)
                       }
-                      isLoading={generatingSimulado === item.week}
-                      className="bg-green-500 hover:bg-green-600"
-                    />
+                      isGenerating={generatingSimulado === item.week}
+                      variant="secondary"
+                    >{`Gerar Simulado (${numQuestoes}Q)`}</Button>
                   )}
                 </div>
               </div>
