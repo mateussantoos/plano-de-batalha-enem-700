@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import type { EnemQuestionFromAPI } from "../types";
+import type { EnemQuestionFromAPI } from "../../../types";
 
 interface SimuladoModalContentProps {
   title: string;
@@ -38,7 +38,6 @@ export default function SimuladoModalContent({
             </ReactMarkdown>
           </div>
 
-          {/* CORREÇÃO: Renderizando o enunciado/prompt da questão */}
           {q.alternativesIntroduction && (
             <p className="font-semibold text-gray-800 my-4">
               {q.alternativesIntroduction}
@@ -49,7 +48,7 @@ export default function SimuladoModalContent({
             {q.alternatives.map((opt) => (
               <div
                 key={opt.letter}
-                className="flex items-start p-2 rounded-md border text-left"
+                className="flex items-start p-2 rounded-md border border-gray-300 text-left"
               >
                 <span className="font-bold mr-2">{opt.letter})</span>
                 <p className="text-sm">{opt.text}</p>

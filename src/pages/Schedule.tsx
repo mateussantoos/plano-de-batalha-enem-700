@@ -1,42 +1,51 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { studyData } from "../constants/studyData";
 import { generateQuestions } from "../services/gemini";
 import Card from "../components/Card";
-import { Loader } from "../components/Loader";
-import AiQuizModalContent from "../components/AiQuizModalContent";
+import AiQuizModalContent from "../components/layout/modal/AiQuizModalContent";
 import Button from "../components/common/Button";
+import { useAppContext } from "../contexts/AppContext";
 
-interface ScheduleProps {
-  setModalContent: (content: React.ReactNode) => void;
-}
-
-export default function Schedule({ setModalContent }: ScheduleProps) {
+export default function Schedule() {
   const [selectedWeek, setSelectedWeek] = useState(0);
-  const [_generatingQuestions, setGeneratingQuestions] = useState<
-    string | null
-  >(null);
+  const [generatingQuestions, setGeneratingQuestions] = useState<string | null>(
+    null
+  );
+  const { setModalContent, setModalVisible } = useAppContext();
 
   const handleGenerateQuestions = async (content: string) => {
     setGeneratingQuestions(content);
-    setModalContent(
-      <div className="flex flex-col items-center justify-center p-8 ">
-        <Loader />
-        <p className="mt-4 text-gray-600">Gerando questões com IA...</p>
-      </div>
-    );
 
     try {
       const data = await generateQuestions(content);
       const quizContent = (
         <AiQuizModalContent questions={data.questions} topic={content} />
       );
+
       setModalContent(quizContent);
+      setModalVisible(true);
     } catch (error) {
       setModalContent(
-        <p className="text-red-500">Erro ao gerar questões. Tente novamente.</p>
+        <p className="text-red-500 font-bold">
+          Erro ao gerar questões. Tente novamente.
+        </p>
       );
     } finally {
       setGeneratingQuestions(null);
+    }
+  };
+
+  const scrollLeft = () => {
+    const container = document.querySelector(".week-tabs-container");
+    if (container) {
+      container.scrollBy({ left: -200, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    const container = document.querySelector(".week-tabs-container");
+    if (container) {
+      container.scrollBy({ left: 200, behavior: "smooth" });
     }
   };
 
@@ -50,8 +59,8 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
           {studyData.schedule.intro}
         </p>
       </div>
-      <div className="border-b border-gray-200">
-        <div className="overflow-x-auto overflow-y-hidden scrollbar-hide">
+      <div className="border-b border-gray-200 relative">
+        <div className="overflow-x-auto overflow-y-hidden scrollbar-hide week-tabs-container">
           <nav
             className="-mb-px flex w-max min-w-full justify-start gap-6 sm:justify-center"
             aria-label="Tabs"
@@ -60,10 +69,10 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
               <button
                 key={i}
                 onClick={() => setSelectedWeek(i)}
-                className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-bold uppercase transition-colors duration-200
+                className={`cursor-pointer whitespace-nowrap border-b-2 px-1 py-4 text-sm font-bold uppercase transition-colors duration-200
             ${
               selectedWeek === i
-                ? "border-green-500 text-green-600"
+                ? "border-duo-green text-duo-green"
                 : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
             }
           `}
@@ -73,6 +82,47 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
             ))}
           </nav>
         </div>
+
+        {/* Navigation buttons - ocultos em telas pequenas */}
+        <button
+          onClick={scrollLeft}
+          className="hidden sm:block cursor-pointer absolute -left-10 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full p-2 shadow-sm hover:bg-white hover:shadow-md transition-all duration-200 z-10"
+          aria-label="Rolar para esquerda"
+        >
+          <svg
+            className="w-4 h-4 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <button
+          onClick={scrollRight}
+          className="hidden sm:block cursor-pointer absolute -right-10 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full p-2 shadow-sm hover:bg-white hover:shadow-md transition-all duration-200 z-10"
+          aria-label="Rolar para direita"
+        >
+          <svg
+            className="w-4 h-4 text-gray-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
       </div>
 
       <div className="text-center mb-6">
@@ -88,7 +138,7 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
           <Card key={d.day} className="p-5">
             <div className="flex-grow">
               <h4 className="text-lg font-bold text-gray-800">{d.day}</h4>
-              <p className="text-md font-semibold text-emerald-500 mt-1">
+              <p className="text-md font-semibold text-duo-blue mt-1">
                 {d.subject}
               </p>
               <div className="mt-4 text-gray-600 space-y-2">
@@ -101,7 +151,10 @@ export default function Schedule({ setModalContent }: ScheduleProps) {
               </div>
             </div>
             <div className="mt-4 pt-4 border-t border-gray-100">
-              <Button onClick={() => handleGenerateQuestions(d.content)}>
+              <Button
+                onClick={() => handleGenerateQuestions(d.content)}
+                isGenerating={generatingQuestions === d.content}
+              >
                 Praticar com IA
               </Button>
             </div>

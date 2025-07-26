@@ -10,10 +10,6 @@ import {
 import type { LucideIcon } from "lucide-react";
 import type { View } from "../types";
 
-interface OverviewProps {
-  setActiveView: (view: View) => void;
-}
-
 const navCards: {
   id: View;
   label: string;
@@ -25,7 +21,7 @@ const navCards: {
   { id: "recursos", label: "Recursos", icon: BookOpen },
 ];
 
-export default function Overview({ setActiveView }: OverviewProps) {
+export default function Overview() {
   return (
     <section id="visao-geral" className="space-y-12 animate-fade-in">
       {/* Título e Introdução */}
@@ -45,7 +41,6 @@ export default function Overview({ setActiveView }: OverviewProps) {
           return (
             <button
               key={item.id}
-              onClick={() => setActiveView(item.id)}
               className="w-full text-left rounded-xl transition-transform duration-200 ease-in-out hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
             >
               <Card className="flex h-56 flex-col items-center justify-center p-6 text-center text-gray-800">

@@ -3,14 +3,10 @@ import { studyData } from "../constants/studyData";
 import { generateRepertoire } from "../services/gemini";
 import { generateBalancedSimulado } from "../services/enemAPI";
 import Card from "../components/Card";
-import type { EnemQuestionFromAPI } from "../types";
 import Button from "../components/common/Button";
+import { useAppContext } from "../contexts/AppContext";
 
-interface ProgressProps {
-  startSimulado: (questions: EnemQuestionFromAPI[], title: string) => void;
-}
-
-export default function Progress({ startSimulado }: ProgressProps) {
+export default function Progress() {
   const [generatingRepertoire, setGeneratingRepertoire] = useState<
     string | null
   >(null);
@@ -18,6 +14,8 @@ export default function Progress({ startSimulado }: ProgressProps) {
     null
   );
   const [_modalContent, setModalContent] = useState<React.ReactNode>(null);
+  const { setSimuladoQuestions, setSimuladoTitle, setIsSimuladoActive } =
+    useAppContext();
 
   const handleGenerateRepertoire = async (theme: string) => {
     setGeneratingRepertoire(theme);
@@ -53,10 +51,9 @@ export default function Progress({ startSimulado }: ProgressProps) {
     setGeneratingSimulado(week);
     try {
       const { questions, year } = await generateBalancedSimulado(numQuestions);
-      startSimulado(
-        questions,
-        `Simulado - Semana ${week} (Baseado em ${year})`
-      );
+      setSimuladoQuestions(questions);
+      setSimuladoTitle(`Simulado - Semana ${week} (Baseado em ${year})`);
+      setIsSimuladoActive(true);
     } catch (error) {
       alert(`Ocorreu um erro ao gerar o simulado da Semana ${week}.`);
     } finally {

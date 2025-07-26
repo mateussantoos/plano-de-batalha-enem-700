@@ -1,27 +1,19 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import type { View } from "../types";
+import type { View } from "../../types";
+import { useNavigate } from "react-router-dom";
 
-interface HeaderProps {
-  activeView: View;
-  setActiveView: (view: View) => void;
-}
-
-export default function Header({ activeView, setActiveView }: HeaderProps) {
+export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const navItems: { id: View; label: string }[] = [
-    { id: "visao-geral", label: "Visão Geral" },
-    { id: "cronograma", label: "Cronograma" },
-    { id: "simulados", label: "Simulados" },
-    { id: "progresso", label: "Progresso" },
-    { id: "recursos", label: "Recursos" },
+  const navItems: { id: View; label: string; link: string }[] = [
+    { id: "visao-geral", label: "Visão Geral", link: "/" },
+    { id: "cronograma", label: "Cronograma", link: "/cronograma" },
+    { id: "simulados", label: "Simulados", link: "/simulados" },
+    { id: "progresso", label: "Progresso", link: "/progresso" },
+    { id: "recursos", label: "Recursos", link: "/recursos" },
   ];
-
-  const handleNavClick = (view: View) => {
-    setActiveView(view);
-    setIsMenuOpen(false);
-  };
 
   return (
     <header className="bg-white border-b-3 border-gray-300 sticky top-0 z-30 antialiased">
@@ -32,7 +24,7 @@ export default function Header({ activeView, setActiveView }: HeaderProps) {
             <span className="text-3xl md:text-3xl">🎯</span>
             <div>
               <span>Plano de Batalha</span>{" "}
-              <span className="block sm:inline text-green-600 font-black">
+              <span className="block sm:inline text-duo-green font-black">
                 ENEM 700+
               </span>
             </div>
@@ -43,10 +35,8 @@ export default function Header({ activeView, setActiveView }: HeaderProps) {
             {navItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => handleNavClick(item.id)}
-                className={`uppercase tracking-wide cursor-pointer text-neutral-500 hover:text-green-600 transition-colors duration-200 ${
-                  activeView === item.id ? "text-green-600" : ""
-                }`}
+                className={`focus:text-duo-green uppercase tracking-wide cursor-pointer text-neutral-500 hover:text-duo-green transition-colors duration-200`}
+                onClick={() => navigate(item.link)}
               >
                 {item.label}
               </button>
@@ -76,12 +66,8 @@ export default function Header({ activeView, setActiveView }: HeaderProps) {
               {navItems.map((item) => (
                 <button
                   key={item.id}
-                  onClick={() => handleNavClick(item.id)}
-                  className={`w-full py-2 text-center uppercase tracking-wide cursor-pointer  text-gray-500 hover:text-green-600 transition-colors duration-200 ${
-                    activeView === item.id
-                      ? "text-green-600 font-black"
-                      : "font-bold"
-                  }`}
+                  className={`focus:text-duo-green focus:font-black w-full py-2 text-center uppercase tracking-wide cursor-pointer  text-gray-500 hover:text-duo-green transition-colors duration-200 font-bold`}
+                  onClick={() => navigate(item.link)}
                 >
                   {item.label}
                 </button>

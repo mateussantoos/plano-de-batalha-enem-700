@@ -1,16 +1,26 @@
-// src/pages/Simulados.tsx
 import { useState } from "react";
 import Card from "../components/Card";
 import { generateBalancedSimulado } from "../services/enemAPI";
 import type { EnemQuestionFromAPI } from "../types";
 import Button from "../components/common/Button";
+import { useAppContext } from "../contexts/AppContext";
 
-interface SimuladosProps {
-  startSimulado: (questions: EnemQuestionFromAPI[], title: string) => void;
-}
-
-export default function Simulados({ startSimulado }: SimuladosProps) {
+export default function Simulados() {
   const [isLoading, setIsLoading] = useState(false);
+  const { setSimuladoQuestions, setSimuladoTitle, setIsSimuladoActive } =
+    useAppContext();
+
+  const startSimulado = (questions: EnemQuestionFromAPI[], title: string) => {
+    if (questions.length > 0) {
+      setSimuladoQuestions(questions);
+      setSimuladoTitle(title);
+      setIsSimuladoActive(true);
+    } else {
+      alert(
+        "Não foi possível gerar o simulado: nenhuma questão foi encontrada."
+      );
+    }
+  };
 
   const handleGenerateSimulado = async (numQuestions: number) => {
     setIsLoading(true);

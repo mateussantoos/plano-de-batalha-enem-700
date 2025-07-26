@@ -893,32 +893,32 @@ export const studyData = {
       {
         category: "Matemática",
         name: "Professor Ferretto",
-        link: "https://www.youtube.com/c/professorferretto",
+        link: "https://www.youtube.com/professorferretto",
       },
       {
         category: "Física",
         name: "Professor Boaro",
-        link: "https://www.youtube.com/c/professoboaro",
+        link: "https://www.youtube.com/professoboaro",
       },
       {
         category: "Química",
         name: "Marcelão da Química",
-        link: "https://www.youtube.com/c/MarcelaoDaQuimica",
+        link: "https://www.youtube.com/MarcelaoDaQuimica",
       },
       {
         category: "Biologia",
         name: "Biologia Total",
-        link: "https://www.youtube.com/c/BiologiaTotal",
+        link: "https://www.youtube.com/BiologiaTotal",
       },
       {
         category: "Humanas",
         name: "Parabólica",
-        link: "https://www.youtube.com/c/Parabolica",
+        link: "https://www.youtube.com/Parabolica",
       },
       {
         category: "Linguagens",
         name: "Débora Aladim",
-        link: "https://www.youtube.com/c/DeboraAladim",
+        link: "https://www.youtube.com/DeboraAladim",
       },
     ],
     platforms: [
