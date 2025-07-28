@@ -3,6 +3,7 @@ import { studyData } from "../constants/studyData";
 import { generateQuestions } from "../services/gemini";
 import Card from "../components/Card";
 import AiQuizModalContent from "../components/layout/modal/AiQuizModalContent";
+import VideoModalContent from "../components/VideoModalContent";
 import Button from "../components/common/Button";
 import { useAppContext } from "../contexts/AppContext";
 
@@ -33,6 +34,28 @@ export default function Schedule() {
     } finally {
       setGeneratingQuestions(null);
     }
+  };
+
+  const handleOpenVideo = (
+    videoUrl: string,
+    videoTitle: string,
+    content: string
+  ) => {
+    if (!videoUrl) {
+      alert("Nenhum vídeo disponível para este conteúdo.");
+      return;
+    }
+
+    const videoContent = (
+      <VideoModalContent
+        videoUrl={videoUrl}
+        videoTitle={videoTitle}
+        explanation={content}
+      />
+    );
+
+    setModalContent(videoContent);
+    setModalVisible(true);
   };
 
   const scrollLeft = () => {
@@ -150,13 +173,24 @@ export default function Schedule() {
                 </p>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
               <Button
                 onClick={() => handleGenerateQuestions(d.content)}
                 isGenerating={generatingQuestions === d.content}
               >
                 Praticar com IA
               </Button>
+              {d.videoUrl && (
+                <Button
+                  onClick={() =>
+                    handleOpenVideo(d.videoUrl, d.videoTitle, d.content)
+                  }
+                  variant="secondary"
+                  className="w-full"
+                >
+                  📺 Assistir Videoaula
+                </Button>
+              )}
             </div>
           </Card>
         ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { studyData } from "../constants/studyData";
 import { generateRepertoire } from "../services/gemini";
 import { generateBalancedSimulado } from "../services/enemAPI";
@@ -13,16 +13,18 @@ export default function Progress() {
   const [generatingSimulado, setGeneratingSimulado] = useState<number | null>(
     null
   );
-  const [_modalContent, setModalContent] = useState<React.ReactNode>(null);
-  const { setSimuladoQuestions, setSimuladoTitle, setIsSimuladoActive } =
-    useAppContext();
+  const {
+    setModalContent,
+    setModalVisible,
+    setSimuladoQuestions,
+    setSimuladoTitle,
+    setIsSimuladoActive,
+  } = useAppContext();
 
   const handleGenerateRepertoire = async (theme: string) => {
     setGeneratingRepertoire(theme);
-    console.log("Iniciando geração de repertório...");
     try {
       const data = await generateRepertoire(theme);
-      console.log(data);
       const formattedText = data
         .replace(/\n/g, "<br />")
         .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
@@ -35,6 +37,7 @@ export default function Progress() {
           />
         </div>
       );
+      setModalVisible(true);
     } catch (error) {
       console.error("Erro ao gerar repertório:", error);
       setModalContent(
@@ -42,6 +45,7 @@ export default function Progress() {
           Erro ao gerar repertório. Tente novamente.
         </p>
       );
+      setModalVisible(true);
     } finally {
       setGeneratingRepertoire(null);
     }

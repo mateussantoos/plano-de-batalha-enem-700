@@ -9,19 +9,32 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { View } from "../types";
+import { useNavigate } from "react-router-dom";
 
 const navCards: {
   id: View;
   label: string;
   icon: LucideIcon;
+  link?: string;
 }[] = [
-  { id: "cronograma", label: "Cronograma", icon: CalendarDays },
-  { id: "simulados", label: "Simulados", icon: ClipboardCheck },
-  { id: "progresso", label: "Progresso", icon: TrendingUp },
-  { id: "recursos", label: "Recursos", icon: BookOpen },
+  {
+    id: "cronograma",
+    label: "Cronograma",
+    icon: CalendarDays,
+    link: "/cronograma",
+  },
+  {
+    id: "simulados",
+    label: "Simulados",
+    icon: ClipboardCheck,
+    link: "/simulados",
+  },
+  { id: "progresso", label: "Progresso", icon: TrendingUp, link: "/progresso" },
+  { id: "recursos", label: "Recursos", icon: BookOpen, link: "/recursos" },
 ];
 
 export default function Overview() {
+  const navigate = useNavigate();
   return (
     <section id="visao-geral" className="space-y-12 animate-fade-in">
       {/* Título e Introdução */}
@@ -41,7 +54,12 @@ export default function Overview() {
           return (
             <button
               key={item.id}
-              className="w-full text-left rounded-xl transition-transform duration-200 ease-in-out hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+              className="cursor-pointer w-full text-left rounded-xl transition-transform duration-200 ease-in-out hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500"
+              onClick={() => {
+                if (item.link) {
+                  navigate(item.link);
+                }
+              }}
             >
               <Card className="flex h-56 flex-col items-center justify-center p-6 text-center text-gray-800">
                 <Icon className="mb-4 h-20 w-20 stroke-1 text-green-600" />

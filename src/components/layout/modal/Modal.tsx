@@ -4,6 +4,9 @@ import { useEffect } from "react";
 export default function Modal() {
   const { modalVisible, modalContent, setModalVisible } = useAppContext();
 
+  // Título padrão do modal
+  const modalTitle = "📚 Conteúdo";
+
   useEffect(() => {
     if (modalVisible) {
       document.body.style.overflow = "hidden";
@@ -24,7 +27,7 @@ export default function Modal() {
         <div className="p-4 sm:p-6 lg:p-8">
           <div className="flex justify-between items-center mb-4 sm:mb-6">
             <h2 className="text-xl sm:text-2xl font-black text-gray-800 uppercase tracking-wide">
-              🎯 Quiz
+              {modalTitle}
             </h2>
             <button
               onClick={() => setModalVisible(false)}
