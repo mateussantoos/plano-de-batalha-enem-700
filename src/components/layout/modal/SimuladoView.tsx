@@ -274,7 +274,7 @@ export default function SimuladoView({
             </Button>
             <Button
               onClick={handleFinish}
-              variant="tertiary"
+              variant="terciary"
               className="text-xs sm:text-sm"
             >
               Finalizar

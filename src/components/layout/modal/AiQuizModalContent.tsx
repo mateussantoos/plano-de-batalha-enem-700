@@ -186,7 +186,7 @@ export default function AiQuizModalContent({
 
       {!isFinished && (
         <div className="mt-6 sm:mt-8 flex justify-center">
-          <Button onClick={handleFinish} variant="tertiary">
+          <Button onClick={handleFinish} variant="terciary">
             🎯 Finalizar e Corrigir
           </Button>
         </div>
