@@ -37,11 +37,12 @@ export default function Schedule() {
   };
 
   const handleOpenVideo = (
-    videoUrl: string,
-    videoTitle: string,
-    content: string
+    videoUrl: string | undefined,
+    videoTitle: string | undefined,
+    content: string,
+    videos?: { videoUrl: string; videoTitle: string }[]
   ) => {
-    if (!videoUrl) {
+    if (!videoUrl && (!videos || videos.length === 0)) {
       alert("Nenhum vídeo disponível para este conteúdo.");
       return;
     }
@@ -51,6 +52,7 @@ export default function Schedule() {
         videoUrl={videoUrl}
         videoTitle={videoTitle}
         explanation={content}
+        videos={videos}
       />
     );
 
@@ -180,16 +182,28 @@ export default function Schedule() {
               >
                 Praticar com IA
               </Button>
-              {d.videoUrl && (
+              {d.videos ? (
                 <Button
                   onClick={() =>
-                    handleOpenVideo(d.videoUrl, d.videoTitle, d.content)
+                    handleOpenVideo(undefined, undefined, d.content, d.videos)
                   }
                   variant="secondary"
                   className="w-full"
                 >
-                  📺 Assistir Videoaula
+                  📺 Assistir Videoaulas
                 </Button>
+              ) : (
+                d.videoUrl && (
+                  <Button
+                    onClick={() =>
+                      handleOpenVideo(d.videoUrl, d.videoTitle, d.content)
+                    }
+                    variant="secondary"
+                    className="w-full"
+                  >
+                    📺 Assistir Videoaula
+                  </Button>
+                )
               )}
             </div>
           </Card>
