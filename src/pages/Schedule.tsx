@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { studyData } from "../constants/studyData";
 import { generateQuestions } from "../services/gemini";
 import Card from "../components/Card";
@@ -6,6 +6,11 @@ import AiQuizModalContent from "../components/layout/modal/AiQuizModalContent";
 import VideoModalContent from "../components/VideoModalContent";
 import Button from "../components/common/Button";
 import { useAppContext } from "../contexts/AppContext";
+import { useAuth } from "../contexts/AuthContext";
+import {
+  getUserDayCompletion,
+  setUserDayCompletion,
+} from "../services/userProgressService";
 
 export default function Schedule() {
   const [selectedWeek, setSelectedWeek] = useState(0);
@@ -13,6 +18,33 @@ export default function Schedule() {
     null
   );
   const { setModalContent, setModalVisible } = useAppContext();
+  const { user } = useAuth();
+  const [completedDays, setCompletedDays] = useState<Record<string, boolean>>(
+    {}
+  );
+
+  useEffect(() => {
+    if (!user) return;
+    // Carrega o progresso dos dias da semana selecionada
+    const fetchCompletion = async () => {
+      const week = studyData.schedule.weeks[selectedWeek];
+      const newCompleted: Record<string, boolean> = {};
+      await Promise.all(
+        week.days.map(async (_d, dayIdx) => {
+          const dayId = `${selectedWeek}-${dayIdx}`;
+          newCompleted[dayId] = await getUserDayCompletion(user.uid, dayId);
+        })
+      );
+      setCompletedDays(newCompleted);
+    };
+    fetchCompletion();
+  }, [selectedWeek, user]);
+
+  const handleToggleDay = async (dayId: string, current: boolean) => {
+    if (!user) return;
+    await setUserDayCompletion(user.uid, dayId, !current);
+    setCompletedDays((prev) => ({ ...prev, [dayId]: !current }));
+  };
 
   const handleGenerateQuestions = async (content: string) => {
     setGeneratingQuestions(content);
@@ -159,55 +191,85 @@ export default function Schedule() {
         </h3>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {studyData.schedule.weeks[selectedWeek].days.map((d) => (
-          <Card key={d.day} className="p-5">
-            <div className="flex-grow">
-              <h4 className="text-lg font-bold text-gray-800">{d.day}</h4>
-              <p className="text-md font-semibold text-duo-blue mt-1">
-                {d.subject}
-              </p>
-              <div className="mt-4 text-gray-600 space-y-2">
-                <p className="text-sm font-base">
-                  <span className="font-semibold">Conteúdo:</span> {d.content}
+        {studyData.schedule.weeks[selectedWeek].days.map((d, dayIdx) => {
+          const dayId = `${selectedWeek}-${dayIdx}`;
+          const isCompleted = completedDays[dayId];
+          const [loadingDay, setLoadingDay] = useState(false);
+          return (
+            <Card
+              key={dayId}
+              className={`p-5 transition-colors duration-200 ${
+                isCompleted ? "bg-neutral-50 opacity-80 border-gray-500" : ""
+              }`}
+            >
+              <div className="flex-grow">
+                <h4 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                  {d.day}
+                </h4>
+                <p className="text-md font-semibold text-duo-blue mt-1">
+                  {d.subject}
                 </p>
-                <p className="text-sm font-base">
-                  <span className="font-semibold">Atividade:</span> {d.activity}
-                </p>
+                <div className="mt-4 text-gray-600 space-y-2">
+                  <p className="text-sm font-base">
+                    <span className="font-semibold">Conteúdo:</span> {d.content}
+                  </p>
+                  <p className="text-sm font-base">
+                    <span className="font-semibold">Atividade:</span>{" "}
+                    {d.activity}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
-              <Button
-                onClick={() => handleGenerateQuestions(d.content)}
-                isGenerating={generatingQuestions === d.content}
-              >
-                Praticar com IA
-              </Button>
-              {d.videos ? (
+              <div className="mt-4 pt-4 border-t border-gray-100 space-y-2">
                 <Button
-                  onClick={() =>
-                    handleOpenVideo(undefined, undefined, d.content, d.videos)
-                  }
-                  variant="secondary"
-                  className="w-full"
+                  onClick={() => handleGenerateQuestions(d.content)}
+                  isGenerating={generatingQuestions === d.content}
+                  disabled={isCompleted}
                 >
-                  📺 Assistir Videoaulas
+                  Praticar com IA
                 </Button>
-              ) : (
-                d.videoUrl && (
+                {d.videos ? (
                   <Button
                     onClick={() =>
-                      handleOpenVideo(d.videoUrl, d.videoTitle, d.content)
+                      handleOpenVideo(undefined, undefined, d.content, d.videos)
                     }
                     variant="secondary"
                     className="w-full"
+                    disabled={isCompleted}
                   >
-                    📺 Assistir Videoaula
+                    📺 Assistir Videoaulas
                   </Button>
-                )
-              )}
-            </div>
-          </Card>
-        ))}
+                ) : (
+                  d.videoUrl && (
+                    <Button
+                      onClick={() =>
+                        handleOpenVideo(d.videoUrl, d.videoTitle, d.content)
+                      }
+                      variant="secondary"
+                      className="w-full"
+                      disabled={isCompleted}
+                    >
+                      📺 Assistir Videoaula
+                    </Button>
+                  )
+                )}
+                <Button
+                  variant={isCompleted ? "secondary" : "terciary"}
+                  className="w-full mt-2"
+                  isLoading={loadingDay}
+                  disabled={!user}
+                  onClick={async () => {
+                    if (!user) return;
+                    setLoadingDay(true);
+                    await handleToggleDay(dayId, isCompleted);
+                    setLoadingDay(false);
+                  }}
+                >
+                  {isCompleted ? "Reabrir tarefa" : "Concluir Tarefa"}
+                </Button>
+              </div>
+            </Card>
+          );
+        })}
       </div>
     </section>
   );

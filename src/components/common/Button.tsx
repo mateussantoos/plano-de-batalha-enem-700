@@ -4,7 +4,7 @@ import { type ReactNode } from "react";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   isLoading?: boolean;
-  variant?: "primary" | "secondary" | "tertiary" | "danger";
+  variant?: "primary" | "secondary" | "terciary" | "danger" | "disabled";
   icon?: ReactNode;
   isGenerating?: boolean;
 }
@@ -26,10 +26,11 @@ export default function Button({
       "border-b-4 border-duo-green-dark bg-duo-green text-white hover:brightness-95 active:translate-y-1 active:border-b-0 disabled:border-b-0 disabled:bg-gray-300 disabled:text-gray-500",
     secondary:
       "border-2 border-gray-300 bg-white text-sky-500 hover:bg-gray-100 active:bg-gray-200 disabled:bg-gray-100 disabled:text-gray-400 disabled:border-gray-200",
-    tertiary:
+    terciary:
       "border-b-4 border-duo-blue-dark bg-duo-blue text-white hover:brightness-95 active:translate-y-1 active:border-b-0 disabled:border-b-0 disabled:bg-gray-300 disabled:text-gray-500",
     danger:
       "border-b-4 border-red-700 bg-red-500 text-white hover:brightness-95 active:translate-y-1 active:border-b-0 disabled:border-b-0 disabled:bg-gray-300 disabled:text-gray-500",
+    disabled: "border-b-0 bg-gray-300 text-gray-500 cursor-not-allowed",
   };
 
   const combinedClasses = `${baseClasses} ${variants[variant]} ${
