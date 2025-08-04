@@ -3,6 +3,7 @@
 export type View =
   | "visao-geral"
   | "cronograma"
+  | "materiais"
   | "progresso"
   | "recursos"
   | "simulados";
@@ -52,4 +53,29 @@ export interface EnemQuestionFromAPI {
   }[];
   correctAlternative: string;
   language?: "ingles" | "espanhol" | null;
+}
+
+export interface MaterialTopic {
+  topico: string;
+  videos: string[];
+}
+
+export interface MaterialDocument {
+  id: string;
+  order: number;
+  materia: string;
+  topicos_lista: MaterialTopic[];
+}
+
+export interface StudyMaterialContent {
+  introduction: string;
+  coreConcepts: {
+    title: string;
+    explanation: string;
+  }[];
+  practicalExample: {
+    description: string;
+    resolution: string;
+  };
+  enemTip: string;
 }

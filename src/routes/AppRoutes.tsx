@@ -7,6 +7,7 @@ import Resources from "../pages/Resources";
 import Login from "../pages/Login";
 import { useAuth } from "../contexts/AuthContext";
 import type { ReactElement } from "react";
+import Materials from "../pages/Materials";
 
 function PrivateRoute({ children }: { children: ReactElement }) {
   const { user, loading } = useAuth();
@@ -47,6 +48,14 @@ export const AppRoutes = () => {
         element={
           <PrivateRoute>
             <Schedule />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/materiais"
+        element={
+          <PrivateRoute>
+            <Materials />
           </PrivateRoute>
         }
       />

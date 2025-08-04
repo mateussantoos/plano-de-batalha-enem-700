@@ -18,6 +18,7 @@ export default function Header() {
   const navItems: { id: View; label: string; link: string }[] = [
     { id: "visao-geral", label: "Visão Geral", link: "/" },
     { id: "cronograma", label: "Cronograma", link: "/cronograma" },
+    { id: "materiais", label: "Materiais", link: "/materiais" },
     { id: "simulados", label: "Simulados", link: "/simulados" },
     { id: "progresso", label: "Progresso", link: "/progresso" },
     { id: "recursos", label: "Recursos", link: "/recursos" },
