@@ -32,7 +32,7 @@ export const generateRepertoire = async (theme: string): Promise<string> => {
 export const generateQuestions = async (
   topic: string
 ): Promise<GeneratedQuestionsResponse> => {
-  const prompt = `Gere 2 questões de múltipla escolha, em português e no estilo do ENEM, sobre o tópico "${topic}".`;
+  const prompt = `Gere 2 questões de múltipla escolha contextualizadas, NÍVEL MÉDIO, em português e no estilo do ENEM, sobre o tópico "${topic}".`;
   const generationConfig = {
     responseMimeType: "application/json",
     responseSchema: {
